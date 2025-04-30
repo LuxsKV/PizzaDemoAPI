@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https//cdn.jsdelivr,net/bootstrap@5.3.2/dist/css/bootstrap.min.css:">
+    <title>Cadastrar Nova Pizza</title>
+    <style>
+        .container{
+            max-width: 600px;
+            margin-top: 50px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <div class="container">
+        <h2 class="mb-4 tex-center">Cadastro de pizza</h2>
+        <div id="mensagem" class="alert d-nome" role="alert"></div>
+
+        <form id="formPizza">    
+            <div class="mb-3">
+                <label for="sabor">Sabor da Pizza</label>
+                <input type="text" id="sabor">
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100">Gravar</button>
+    
+        </form>
+    </div>
+    <script>
+        const form =document.getElementById('formPizza');
+        const mensagem =document.getElementById('mensagem')
+
+        form.addEventListener('submit', function(e) {
+            e.prevenDefault();
+
+            const sabor = document.getElementById('sabor').value;
+
+            fetch('http://localhost:8099/pizza',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body : JSON.stringify({sabor})
+            })
+            .then(response =>{
+                if(response.ok){
+                    mensagem.className = 'alert alert-success';
+                    mensagem.textContent = 'Pizza cadastrada com sucesso!';
+                    mensagem.classList.remove('d-none');
+                }else{
+                    throw new Error('Erro ao cadastrar a pizza')
+                }
+            })
+            .catch(error => {
+                mensagem.className = 'alert alert-danger';
+                mensagem.textContent = 'Falha ao cadastrar a pizza!';
+                mensagem.classList.remove('d-none');
+            });
+                
+        });
+
+
+
+    </script>
+    
+</body>
+
+</html>
